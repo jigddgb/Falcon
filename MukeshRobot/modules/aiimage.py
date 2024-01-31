@@ -36,7 +36,7 @@ async def imagine_(b, message: Message):
     else:
         text =message.text.split(None, 1)[1]
     m =await message.reply_text( "`Please wait...,\n\nGenerating prompt .. ...`")
-    results= requests.get(f"https://api.safone.dev/imagine?prompt={text}&limit=6").json()["image"]
+    results= requests.get(f"https://api.safone.dev/imagine?prompt={text}").json()["image"]
 
     caption = f"""
 sᴜᴄᴇssғᴜʟʟʏ Gᴇɴᴇʀᴀᴛᴇᴅ 💘
