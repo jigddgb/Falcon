@@ -4,7 +4,6 @@ import base64
 import random
 from telethon.tl import types 
 from telethon.utils import get_display_name, get_peer_id
-from sqlalchemy import Boolean, Column 
 from asyncio import sleep
 from telethon.errors import MessageDeleteForbiddenError, MessageNotModifiedError
 from telethon.tl.custom import Message
