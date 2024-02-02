@@ -27,7 +27,8 @@ from pyrogram.types import  Message
 from pyrogram.enums import ChatAction
 
 from .. import pbot as  Mukesh,BOT_USERNAME
-import requests
+import requests, base64
+from io import BytesIO
 
 
 @Mukesh.on_message(filters.command("qrcode"))
@@ -37,15 +38,15 @@ async def qrcode_(_, message: Message):
     else:
         text =message.text.split(None, 1)[1]
     m =await message.reply_text( "`Please wait...,\n\nCreating your Qrcode ...`")
-    write = requests.get(f"https://mukesh-api.vercel.app/qrcode/{text}").json()["results"]
-
+    write = requests.get(f"https://api.safone.dev/qrcode?text={text}").json()["image"]
+    qr_code_img = BytesIO(base64.b64decode(write))
     caption = f"""
 sᴜᴄᴇssғᴜʟʟʏ Gᴇɴᴇʀᴀᴛᴇᴅ Qʀᴄᴏᴅᴇ 💘
 ✨ **Gᴇɴᴇʀᴀᴛᴇᴅ ʙʏ :** @{BOT_USERNAME}
 🥀 **ʀᴇǫᴜᴇsᴛᴇᴅ ʙʏ :** {message.from_user.mention}
 """
     await m.delete()
-    await message.reply_photo(photo=write,caption=caption)
+    await message.reply_photo(photo=qr_code_img,caption=caption)
 # -----------CREDITS -----------
 # telegram : @legend_coder
 # github : noob-mukesh
