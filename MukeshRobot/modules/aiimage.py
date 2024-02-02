@@ -27,7 +27,8 @@ from pyrogram.types import  Message
 from pyrogram.enums import ChatAction
 from pyrogram.types import InputMediaPhoto
 from .. import pbot as  Mukesh,BOT_USERNAME
-import requests
+import requests, base64
+from io import BytesIO
 
 @Mukesh.on_message(filters.command("imagine"))
 async def imagine_(b, message: Message):
@@ -35,21 +36,25 @@ async def imagine_(b, message: Message):
         text = message.reply_to_message.text
     else:
         text =message.text.split(None, 1)[1]
-    m =await message.reply_text( "`Please wait...,\n\nGenerating prompt .. ...`")
-    results= requests.get(f"https://api.safone.dev/imagine?prompt={text}").json()["image"]
+    m =await message.reply_text( "`Please wait 4-5 seconds...,\n\nGenerating prompt .. ...`")
+    results= requests.get(f"https://api.safone.dev/imagine?prompt={text}&limit=5").json()["image"]
 
     caption = f"""
 sᴜᴄᴇssғᴜʟʟʏ Gᴇɴᴇʀᴀᴛᴇᴅ 💘
 ✨ **Gᴇɴᴇʀᴀᴛᴇᴅ ʙʏ :** @{BOT_USERNAME}
 🥀 **ʀᴇǫᴜᴇsᴛᴇᴅ ʙʏ :** {message.from_user.mention}
 """
-    await m.delete()
     photos=[]
-    for i in range(5):
-        photos.append(InputMediaPhoto(results[i]))
-    photos.append(InputMediaPhoto(results[5], caption=caption))
-    await b.send_media_group(message.chat.id, media=photos)
-    
+    try:
+        for i in range(4):
+            photos.append(InputMediaPhoto(BytesIO(base64.b64decode(results[i]))))
+        photos.append(InputMediaPhoto(BytesIO(base64.b64decode(results[4])), caption=caption))
+        await m.delete()
+        await b.send_media_group(message.chat.id, media=photos)
+
+    except Exception as e :
+        await message.reply(f"Error Occured: {e}")
+              
 # -----------CREDITS -----------
 # telegram : @legend_coder
 # github : noob-mukesh
