@@ -3,23 +3,25 @@ from .. import pbot as Mukesh,BOT_NAME,BOT_USERNAME
 import time
 from pyrogram.enums import ChatAction, ParseMode
 from pyrogram import filters
+import random, string
+
 @Mukesh.on_message(filters.command(["password"]))
 async def passwordgen(bot, message):
     
     try:
-        
         await bot.send_chat_action(message.chat.id, ChatAction.TYPING)
         if len(message.command) < 2:
             await message.reply_text(
-            "Example:**\n\n`/password <length>`")
+            "Example:**\n\n`/password ⪻ length ⪼`")
         else:
-            a = message.text.split(' ', 1)[1]
-            response = requests.get(f'https://mukesh-api.vercel.app/password/{a}') 
-            x=response.json()["results"]
-            
+            length = message.text.split(' ', 1)[1]
+            all = string.ascii_letters + string.digits + string.punctuation
+            x = "".join(random.sample(all,length))
             await message.reply_text(f"Here is your Password:- ` {x}`", parse_mode=ParseMode.MARKDOWN)     
     except Exception as e:
         await message.reply_text(f"**ᴇʀʀᴏʀ: {e} ")
+
+
 @Mukesh.on_message(filters.command(["morseencode"]))
 async def morse_en(bot, message):
     
