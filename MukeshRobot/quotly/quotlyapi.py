@@ -124,7 +124,7 @@ def json_parser(data, indent=None, ascii=False):
 
 
 class Quotly:
-    _API = "https://bot.lyo.su/quote/generate"
+    _API = "https://quoteampi.onrender.com/generate"
     _entities = {
         types.MessageEntityPhone: "phone_number",
         types.MessageEntityMention: "mention",
